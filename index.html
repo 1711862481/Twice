@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+	<body>
+		
+		<div id="wrap">
+			{{  message  }}
+			
+			<div v-bind:title = "mytiter">属性赋值</div>
+			
+			<div v-if="flag">v-if开关</div>
+				
+			<ul>
+				<li v-for = "( v, k) in list">
+					{{  k+":"+v.value  }}
+				</li>
+			</ul>
+			
+			<div  v-bind:class = "[activeClass,commeClass]">
+				数组添加class
+			</div>
+			
+			<div v-bind:class = "{flagClass,flags}">
+				键值对添加class
+			</div>
+			
+			<div v-on:click = "handClick">
+				点击事件
+			</div>
+			
+			双向数据绑定
+			<div>
+				双向数据绑定
+			<input type="text" v-model = "inrutMessage"><span>{{ inrutMessage }}</span>
+			</div>
+			
+			<div @click = "maoClick">
+				事件冒泡
+			</div>
+			
+			<!--<div>
+				{{ resversee }}
+			</div>-->
+			
+			<!--组件引入-->
+			<butten-click
+				:todo = "message"
+				:two = "mytiter"
+				@em-zi="parEm"
+				>
+				
+			</butten-click>
+			
+			
+			
+			
+		</div>
+		
+	</body>
+	
+	<script type="text/javascript" src="js/vue.js" ></script>
+	
+<!--                          MVVM   M数据层 --- VM控制层 --- V视图层                                         -->
+	
+	<script>
+		
+		//组件
+			
+			Vue.component("butten-click",{
+				name: "butten-click",
+				data: function (){
+					return{
+						count:1,
+						mess: "666",
+						propss: "",
+					}
+				},
+				template: `
+				         <div class= "jia">
+				         <button type="button" @click="handClick" >  {{ count }} </button> 
+				         <div> {{ todo }} {{ two }} </div>
+				         <div @click = "$emit('em-zi',mess)">
+				              <a> 点击 </a>
+				         </div>
+				         <div @click = "fuzhi">
+				              <a> 点击赋值 </a>
+				         </div>
+				         </div>
+				        
+				         `,
+				methods:{
+					handClick(){
+						this.count++;
+					},
+					fuzhi(){
+						this.propss = this.todo;
+						this.mess = this.propss;
+						console.log(this.mess);
+					},
+					
+				},
+				props:{
+					todo:{
+						type:String,
+						default: ""
+					},
+					two:{
+						type:String,
+						default:""
+					}
+					
+				},
+				
+			});
+		
+//  vue是构造函数
+		var vm = new Vue({
+			el: "#wrap",
+			data: function  () {
+				return{
+					message: "我是warp",
+					mytiter: "给属性赋值",
+					flag: 0,
+					list:[
+					     {id: 1,value: "香蕉"},
+					     {id: 2,value: "苹果"},
+					     {id: 3,value: "棠梨"},
+					],
+					activeClass:"addone",
+					commeClass:"addtwo",
+					flagClass:"add-classthree",
+					flags:false,
+					inrutMessage: "",
+				}
+			},
+			
+			//添加事件监听事件
+			methods:{
+				handClick:function  () {
+					console.log(this);
+					this.flag = true;
+					alert(this.message);
+					this.changeFntion();
+					console.log("父级事件");
+				},
+				changeFntion (){
+					this.message = "你好啊！"
+					
+				},
+				maoClick:function  () {
+				    console.log("子级事件");
+			   },
+			   parEm:function (data){
+			   	    console.log(data);
+			   	    this.message = data;
+			   },
+//			   flag (oldValue,newValue){
+//			   	    console.log{oldValue,newValue};
+//			   }
+			},
+//			watch {
+//				
+//			}
+			
+			//计算属性
+//			comput:{
+//				resversee:function  () {
+//					return this.message.split("").resverse().join("");
+//				}
+//			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		});
+		
+		
+		
+	</script>
+	
+</html>
